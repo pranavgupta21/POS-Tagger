@@ -1,0 +1,77 @@
+DESCRIPTION:
+-----------
+
+The software has 2 parts:
+
+1. Corpus Indexer
+
+	It can be used to index any corpus provided all its text (and only text) files are present inside a single folder (the folder structure may be nested).
+
+2. POS Tagger
+	This part can be used to tag each word of a given piece of text with its most likely Part of Speech given the HMM data and the ta gset to be used for tagging.
+
+3. KeyWord Extractor
+	This part takes a POS Tagged piece of text and generates the keywords that describe the entire text.
+
+
+HOW TO RUN:
+-----------
+
+A. Corpus Indexer
+-----------------
+
+1. create a folder "hmm_data" (defined as MACRO in the program) in the directory of the program; the HMM data files will be made/overwritten inside that folder only
+2. Place the corpus folder containing the corpus files anywhere on your system; the folder may have a nested structure
+3. Run the following command in the folder of the program:
+
+	sh frun.sh <complete path to the folder which contains the corpus files> <target folder for storing the stat files>(OPTIONAL)
+	
+Now, you will find 3 files in your hmm_data_oanc folder
+1. tags_count : 
+	first line stores the total number of tags or total number of words in the corpus
+	following lines contain the count of each of the 35 tags of the Penn Treebank Tag-Set used in the Brown corpus
+2. trans_count:
+	contains number of transitions for each pair of tags (total 35 *35 = 1225 pairs)
+3. corpFreqData.freq
+	contains emmission count of the all the words appearing in the corpus for all the tags/states they appear in
+	
+****NOTE THAT THE ABOVE FILES CONTAIN 'COUNTS' AND NOT 'PROBABILITIES'
+
+B. POS Tagger
+-------------
+
+1. store the given text in a file named 'sample_text' or change the name of the file in prun.sh accordingly
+2. to recompile and run:
+	
+	sh prun.sh > tagger_run_data
+
+A lot of data generated for the purpose of analysis will be directed to the file tagger_generated_data. The Tagged Text will be directed to the terminal screen.
+
+C. KEYWORD EXTRACTOR
+--------------------
+
+1. preparing input : 
+	a) make a file named input (or change the name accordingly in trun.sh).
+	b) Write the total number of words in the first line.
+	c) In the second line, write the pos tagged input; the separator of the actual word and POS Tag being an underscore (_) (or change the MACRO 'TAG_SEPARATOR' in the file vertex.h)
+	
+	NOTE : The POS Tagger above writes such an output on the standard error stream.
+
+2. To recompile and run the KeyWord Extractor, use the following command:
+	
+	sh trun.sh
+	
+
+****THE MAKEFILE PROVIDED HAS VARIOUS USEFUL TARGETS:
+-----------------------------------------------------
+
+1. freq_gen_clean : removes all object files of the corpus indexer
+2. freq_gen_install : compiles the corpus indexer
+3. pos_tagger_clean : removes all the object files of the tagger
+4. pos_tagger_install : recompiles the tagger
+5. txsm_clean : removes all the object files of the KeyWord Extractor
+6. txsm_install : recompiles the KeyWord Extractor
+
+
+------------------------------------- END OF README --------------------------------------
+------------------------------------------------------------------------------------------
